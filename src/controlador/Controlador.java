@@ -58,7 +58,7 @@ public class Controlador {
 		return frame;
 	}
 	public void abrirImagen() {
-		url="/imAutos/auto"+1+".jpg";
+		url="/imAutos/auto"+14+".jpg";
 		
 		PanelImagen pI=panelP.getPanelImagen();
 		imagenes=new ArrayList<String>();

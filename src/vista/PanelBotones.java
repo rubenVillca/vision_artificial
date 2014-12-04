@@ -57,7 +57,7 @@ public class PanelBotones extends JPanel implements ActionListener{
 		botAnalizar.addActionListener(this);
 		add(botAnalizar);
 		
-		botGuardar=new JButton("GUARDAR PLACA");
+		botGuardar=new JButton("EXPORTAR PLACAS");
 		botGuardar.addActionListener(this);
 		add(botGuardar);
 		
