@@ -13,6 +13,7 @@ public class PanelP extends JPanel{
 	private PanelImagen p1;
 	private PanelBotones p2;
 	private PanelPlaca p3;
+	private PanelLista p4;
 	
 	public PanelP(Controlador ctrl){
 		this.ctrl=ctrl;	
@@ -25,6 +26,12 @@ public class PanelP extends JPanel{
 		crearBordeImagen();
 		crearBotones();
 		crearPlaca();
+		crearLista();
+	}
+
+	private void crearLista() {
+		p4=new PanelLista(ctrl);
+		add(p4);
 	}
 
 	private void crearBordeImagen() {
@@ -56,5 +63,9 @@ public class PanelP extends JPanel{
 	}
 	public PanelPlaca getPanelPlaca(){
 		return p3;
+	}
+
+	public PanelLista getPanelLista() {
+		return p4;
 	}
 }

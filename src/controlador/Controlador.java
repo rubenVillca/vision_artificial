@@ -22,10 +22,11 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.highgui.Highgui;
-
 import vista.Frame;
 import vista.PanelImagen;
+import vista.PanelLista;
 import vista.PanelP;
+import vista.PanelPlaca;
 
 public class Controlador {
 	private int ancho,alto;
@@ -33,8 +34,9 @@ public class Controlador {
 	private PanelP panelP;
 	private JFileChooser guardar;
 	private String url;
+	private Image auto;
 	
-	private ArrayList<String> imagenes;
+	private ArrayList<String> imagenes,placas;
 	
 	public Controlador(){
 		ancho=1200;
@@ -43,6 +45,7 @@ public class Controlador {
 		
 	}
 	private void crearContenido() {
+		placas=new ArrayList<String>();
 		frame=new Frame(this);
 		panelP=new PanelP(this);
 		frame.setContentPane(panelP);
@@ -59,40 +62,46 @@ public class Controlador {
 	}
 	public void abrirImagen() {
 		url="/imAutos/auto"+14+".jpg";
+		//url="/imAutos/32.jpg";
 		
 		PanelImagen pI=panelP.getPanelImagen();
 		imagenes=new ArrayList<String>();
 		imagenes.add(url);
 		JLabel imag=new JLabel();
 		ImageIcon icon=new ImageIcon(getClass().getResource(imagenes.get(0)));
+		auto=icon.getImage();
 		imag.setIcon(icon);
 		pI.add(imag);	
 	}
 	public void analizarImagen() {
-		JOptionPane.showMessageDialog(null, "Analizando Imagen...");
+		//System.loadLibrary("opencv_java2410");
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		System.out.println("Welcome to OpenCV " + Core.VERSION);
+		//JOptionPaxne.showMessageDialog(null, "Analizando Imagen...");
 		
 		URL urls=getClass().getResource(imagenes.get(0));
 		url=urls.getPath();
-		System.out.println("Welcome to OpenCV " + Core.VERSION);
-		//System.loadLibrary("opencv_java244");
-		Mat imagen = Highgui.imread(url,Highgui.CV_LOAD_IMAGE_COLOR);
-		    
+		System.out.println(url.substring(1,url.length()));
+		Mat imagen = Highgui.imread(url.substring(1,url.length()),Highgui.CV_LOAD_IMAGE_COLOR);
+		/*Mat imagen=Highgui.imread(getClass().getResource("/imAutos/auto12.jpg").getPath(),1);
+		//Imgproc.cvtColor(imagen, imagen, Imgproc.COLOR_BayerBG2BGR_VNG);
+		System.out.println(imagen.size());
+		Image autoProc;*/
 		if(!imagen.empty()){
-            Image imagenMostrar = convertir(imagen);
-            /*int width=imagenMostrar.getWidth(null);
-            int height=imagenMostrar.getHeight(null);
-            */
-           /* ventana = new Ventana(imagenMostrar);
-            ventana.setSize(width,height);
-            ventana.setLocationRelativeTo(null);
-            ventana.setVisible(true);*/
-        }
+			System.out.println("Se ha analizado la imagen del auto");
+            //autoProc = convertir(imagen);
+            //PanelImagen pI=panelP.getPanelImagen();    
+            //JLabel l=new JLabel(new ImageIcon(autoProc));
+            //pI.add(l);
+            System.out.println("Imagen =\n " + imagen.dump());
+        }else
+        	System.out.println("No se ha analizadoo la imagen del auto");
 		
-		//System.out.println("Welcome to OpenCV " + Core.VERSION);
-        //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        //Mat m  = Mat.eye(5, 5, CvType.CV_8SC1);
-        //Mat m=Highgui.imread(imagenes.get(0));
-        //System.out.println("m =\n " + m.dump());
+        /*Mat m  = Mat.eye(5, 5, CvType.CV_8SC1);
+        // Mat m=Highgui.imread(imagenes.get(0));
+        if(!m.empty()){
+        	System.out.println("m =\n " + m.dump());
+        }*/
 	}
 	private Image convertir(Mat imagen) {
         MatOfByte matOfByte = new MatOfByte();
@@ -130,9 +139,10 @@ public class Controlador {
         image.getRaster().setDataElements(0, 0, cols, rows, data);  
         return image;   
 	}*/
+	
 	@SuppressWarnings("static-access")
 	public void guardarPlaca() {
-		String codigo=panelP.getPanelPlaca().getPlaca();
+		String pls=panelP.getPanelLista().getLista(placas);
 		guardar=new JFileChooser();
 		guardar.setDialogTitle("Guardar Imagen");
 		FileNameExtensionFilter filtro = new FileNameExtensionFilter("TEXTO", "txt" );
@@ -145,7 +155,7 @@ public class Controlador {
             String contenidoTexto = new String();
             try {
                 miArchivo = new FileOutputStream(archivo.getPath());
-                contenidoTexto = codigo;
+                contenidoTexto = pls;
                 miArchivo.write(contenidoTexto.getBytes());
                 miArchivo.close();
             }
@@ -155,11 +165,17 @@ public class Controlador {
           }
 	}
 	public void cerrar() {
-		JOptionPane.showMessageDialog(null, "Saliendo");
+		//JOptionPane.showMessageDialog(null, "Saliendo");
 		System.exit(0);
 	}
 	public void limpiarVentana() {
 		PanelImagen p2=panelP.getPanelImagen();
 		p2.limpiar();
+	}
+	public void cargarLista() {
+		PanelLista pLista=panelP.getPanelLista();
+		PanelPlaca p3=panelP.getPanelPlaca();
+		placas.add(p3.getPlaca());
+		pLista.setTexto(placas);
 	}
 }	
