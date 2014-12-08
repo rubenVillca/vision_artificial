@@ -81,8 +81,10 @@ public class Controlador {
 		
 		URL urls=getClass().getResource(imagenes.get(0));
 		url=urls.getPath();
-		System.out.println(url.substring(1,url.length()));
-		Mat imagen = Highgui.imread(url.substring(1,url.length()),Highgui.CV_LOAD_IMAGE_COLOR);
+		url="d:\\Workspace\\Eclipse_Helios\\Vision_Artificial2\\bin\\imAutos\\auto8.jpg";
+		System.out.println(url);
+		//url="d:\\Workspace\\Eclipse_Helios\\VisionArtificial4\\bin\\img\\1.png";
+		Mat imagen = Highgui.imread(url);
 		/*Mat imagen=Highgui.imread(getClass().getResource("/imAutos/auto12.jpg").getPath(),1);
 		//Imgproc.cvtColor(imagen, imagen, Imgproc.COLOR_BayerBG2BGR_VNG);
 		System.out.println(imagen.size());
